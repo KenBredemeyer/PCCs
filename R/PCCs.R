@@ -44,7 +44,7 @@ plot_PCCs <- function(data_matrix, betas, class_intervals = 4) {
 	comparison <- vector("list", nrow(data_matrix))
 	for (i in 1:nrow(data_matrix)) {
 	  comparison[[i]] <- cbind(unname(data_matrix[index[[i]], i]), betas[(index[[i]])], pw[[i]])
-	  colnames(comparison[[i]]) <- c("Proportions", "Locations", "class interval")
+	  colnames(comparison[[i]]) <- c("Proportions", "Locations", "class_interval")
 	}
 
 	xx <- seq(-13, 13, 0.01)
@@ -54,14 +54,9 @@ plot_PCCs <- function(data_matrix, betas, class_intervals = 4) {
 	means_all <- vector("list", nrow(data_matrix))
 
 	#par(ask = TRUE)
+	# class interval means
 	for (n in 1:nrow(data_matrix)) {
-	  # calculate mean proportions & mean locations
-	  compare <- data.table::data.table(comparison[[n]])
-	  #compare <- data.table::setDT(compare)
-	  #means <- compare[ , .(mean_p = mean(Proportions), mean_a = mean(Locations)), by = "class interval"]
-	  #data.table:::`[.data.table`(locations, j = .(start, end))
-	  means <- data.table:::`[.data.table`(compare, j = .(mean_p = mean(Proportions), mean_a = mean(Locations)), by = "class interval")
-	  means <- data.frame(means)   # with = FALSE  (normal subsetting)
+    means <- aggregate(comparison[[n]], list(comparison[[n]][,"class_interval"]), mean)
 	  means_all[[n]] <- means
 
 	  #points for plotting
