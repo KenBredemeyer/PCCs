@@ -6,6 +6,10 @@
 #' @param class_intervals The number of class intervals.
 #' @param performances Which performances to plot.  Character "all" for all performances, or a
 #'   numeric (integer) vector of performance numbers to plot.
+#' @examples
+#' plot_PCCs(gtpa2018_proportions_dm, gtpa2018_locations,
+#'           class_intervals = 3,
+#'           performances = 21:22)
 #'
 #' @export
 plot_PCCs <- function(data_matrix, betas, class_intervals = 4, performances = "all") {
