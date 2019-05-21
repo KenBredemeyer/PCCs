@@ -4,9 +4,11 @@
 #'   converted to proportions.  Null comparisons must be represented as NA.
 #' @param betas Named vector of locations of performance ability, in logits.
 #' @param class_intervals The number of class intervals.
+#' @param performances Which performances to plot.  Character "all" for all performances, or a
+#'   numeric (integer) vector of performance numbers to plot.
 #'
 #' @export
-plot_PCCs <- function(data_matrix, betas, class_intervals = 4) {
+plot_PCCs <- function(data_matrix, betas, class_intervals = 4, performances = "all") {
   stopifnot(class(data_matrix) == "data.frame" && class(betas) == "numeric")
 
 	# display minimum number of comparisons per script
@@ -36,10 +38,6 @@ plot_PCCs <- function(data_matrix, betas, class_intervals = 4) {
 	  pw[[i]] <- rep(x, round(pw.r, 0))
 	}
 
-	#   data_matrix[index[[2]], 2]
-	#unname(data_matrix[index[[2]], 2])
-	#comparisons <- cbind(unname(data_matrix[index[[2]], 2]), b[(index[[2]])], pw[[2]])
-
 	# Create a matrix of comparisons for each script (a list of matrices)
 	comparison <- vector("list", nrow(data_matrix))
 	for (i in 1:nrow(data_matrix)) {
@@ -54,8 +52,9 @@ plot_PCCs <- function(data_matrix, betas, class_intervals = 4) {
 	means_all <- vector("list", nrow(data_matrix))
 
 	#par(ask = TRUE)
-	# class interval means
-	for (n in 1:nrow(data_matrix)) {
+	if (is.character(performances)) performances = 1:nrow(data_matrix)
+	for (n in performances) {
+		# class interval means
     means <- aggregate(comparison[[n]], list(comparison[[n]][,"class_interval"]), mean)
 	  means_all[[n]] <- means
 
